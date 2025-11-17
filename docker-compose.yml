@@ -73,7 +73,7 @@ services:
       SPARK_MODE: master
       SPARK_MASTER_HOST: spark-master
     ports:
-      - "8080:8080"    # Spark master UI
+      - "9090:8080"    # Spark master UI
       - "7077:7077"    # Spark master port
     volumes:
       - ./jobs:/opt/spark/jobs
