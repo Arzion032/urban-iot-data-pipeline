@@ -1,22 +1,24 @@
 x-sparky-common: &sparky-common
-    image: apache/spark:3.5.0
-    container_name: spark-worker-1
-    hostname: spark-worker-1
-    depends_on:
-      - spark-master
-    command: >
-      bash -c "/opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
-      spark://spark-master:7077
-      --cores 2
-      --memory 2g"
-    environment:
-      SPARK_MODE: worker
-    volumes:
-      - ./jobs:/opt/spark/jobs
-    networks:
-      - urban_city
+  build:
+    context: .
+    dockerfile: spark.Dockerfile
+  image: custom-spark:3.5.0
+  hostname: spark-worker-1
+  depends_on:
+    - spark-master
+  command: >
+    bash -c "/opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+    spark://spark-master:7077
+    --cores 2
+    --memory 2g"
+  environment:
+    SPARK_MODE: worker
+  volumes:
+    - ./jobs:/opt/spark/jobs
+    - ./.env:/opt/spark/.env
+  networks:
+    - urban_city
 
-  
 services:
   broker:
     image: confluentinc/cp-server:8.1.0  
@@ -61,7 +63,10 @@ services:
       - urban_city
 
   spark-master:
-    image: apache/spark:3.5.0
+    build:
+      context: .
+      dockerfile: spark.Dockerfile
+    image: custom-spark:3.5.0
     container_name: spark-master
     hostname: spark-master
     command: >
@@ -73,10 +78,11 @@ services:
       SPARK_MODE: master
       SPARK_MASTER_HOST: spark-master
     ports:
-      - "9090:8080"    # Spark master UI
-      - "7077:7077"    # Spark master port
+      - "9090:8080"
+      - "7077:7077"
     volumes:
       - ./jobs:/opt/spark/jobs
+      - ./.env:/opt/spark/.env
     networks:
       - urban_city
 

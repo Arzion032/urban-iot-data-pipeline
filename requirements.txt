@@ -1,6 +1,8 @@
-confluent_kafka
-pyspark
+confluent-kafka==1.9.2
+pyspark==3.5.0
 simplejson
 python-dotenv
 boto3
 requests
+pandas
+pyarrow
