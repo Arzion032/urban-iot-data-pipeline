@@ -192,3 +192,42 @@ Spark validates and transforms incoming JSON data:
 - **AWS Glue** (Data cataloging)
 - **Python 3.x** (Data generation)
 - **Docker & Docker Compose** (Containerization)
+
+## Deployment & Results
+
+This project uses a hybrid deployment approach: processing infrastructure runs in Docker containers while storage and cataloging use managed AWS services.
+
+### AWS S3 Buckets
+
+![S3 Buckets](assets/s3-buckets.png)
+*S3 buckets containing traffic camera images and processed streaming data*
+
+### Processed Data in S3
+
+![S3 Data Structure](assets/urban-spark-streaming-data.png)
+*Parquet files organized by data stream type in urban-spark-streaming-data bucket*
+
+### AWS Glue Data Catalog
+
+![Glue Catalog Tables](assets/aws-glue-data-catalog.png)
+*AWS Glue Data Catalog showing all 5 cataloged tables from the streaming pipeline*
+
+### Glue Crawler Configuration
+
+![Glue Crawler](assets/glue-crawler-config.png)
+*Glue Crawler configured to automatically catalog new data*
+
+### Athena Query Results
+
+![Athena Query](assets/dbeaver_query.png)
+*Sample query on vehicle data using Amazon Athena*
+
+### Spark Streaming UI
+
+![Spark UI](assets/spark-ui.png)
+*Spark Streaming jobs processing data in real-time*
+
+### Kafka Topics
+
+![Kafka Topics](assets/kafka-topics.png)
+*Active Kafka topics receiving IoT sensor data*
