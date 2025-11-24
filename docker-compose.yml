@@ -1,0 +1,97 @@
+x-sparky-common: &sparky-common
+  build:
+    context: .
+    dockerfile: spark.Dockerfile
+  image: custom-spark:3.5.0
+  hostname: spark-worker-1
+  depends_on:
+    - spark-master
+  command: >
+    bash -c "/opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+    spark://spark-master:7077
+    --cores 2
+    --memory 2g"
+  environment:
+    SPARK_MODE: worker
+  volumes:
+    - ./jobs:/opt/spark/jobs
+    - ./.env:/opt/spark/.env
+  networks:
+    - urban_city
+
+services:
+  broker:
+    image: confluentinc/cp-server:8.1.0  
+    hostname: broker
+    container_name: broker
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      # KRaft mode settings
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      
+      # Cluster ID (generate a new one - see below)
+      CLUSTER_ID: 'Tul5R0bsRcehxa7fG_uwGQ'
+      
+      # Replication settings (keep as 1 for single broker)
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      
+      # JMX settings
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      
+      # Other settings
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      
+    healthcheck:
+      test: ['CMD', 'kafka-broker-api-versions', '--bootstrap-server', 'localhost:9092']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - urban_city
+
+  spark-master:
+    build:
+      context: .
+      dockerfile: spark.Dockerfile
+    image: custom-spark:3.5.0
+    container_name: spark-master
+    hostname: spark-master
+    command: >
+      bash -c "/opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+      --host spark-master
+      --port 7077
+      --webui-port 8080"
+    environment:
+      SPARK_MODE: master
+      SPARK_MASTER_HOST: spark-master
+    ports:
+      - "9090:8080"
+      - "7077:7077"
+    volumes:
+      - ./jobs:/opt/spark/jobs
+      - ./.env:/opt/spark/.env
+    networks:
+      - urban_city
+
+  sparky-worker-1:
+    <<: *sparky-common
+    container_name: spark-worker-1
+  sparky-worker-2:
+    <<: *sparky-common
+    container_name: spark-worker-2
+
+networks:
+  urban_city:
