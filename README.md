@@ -175,7 +175,6 @@ Spark validates and transforms incoming JSON data:
 ### Fault Tolerance
 - Spark checkpointing for exactly-once processing
 - Kafka offset management
-- Automatic recovery from failures
 
 ## Monitoring
 
