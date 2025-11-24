@@ -6,19 +6,26 @@ import os
 import random
 import uuid
 import time
-import simplejson as json
 
 random.seed(123)
 
-LONDON_COORDINATES = {"latitude": 51.5074, "longitude": -0.1278}
-BIRMINGHAM_COORDINATES = {"latitude": 52.4862, "longitude": -1.8904}
+ANTIPOLO_COORDINATES = {
+    "latitude": 14.6255,
+    "longitude": 121.1245
+}
+
+BAGUIO_COORDINATES = {
+    "latitude": 16.41639,
+    "longitude": 120.59306
+}
+
 
 # Calculate the increments for lattitude and longitude
-LATITUDE_INCREMENT = (BIRMINGHAM_COORDINATES["latitude"] 
-                            - LONDON_COORDINATES["latitude"]) / 100
+LATITUDE_INCREMENT = (BAGUIO_COORDINATES["latitude"] 
+                            - ANTIPOLO_COORDINATES["latitude"]) / 100
 
-LONGTITUDE_INCREMENT = (BIRMINGHAM_COORDINATES["longitude"] 
-                            - LONDON_COORDINATES["longitude"]) / 100
+LONGITUDE_INCREMENT = (BAGUIO_COORDINATES["longitude"] 
+                            - ANTIPOLO_COORDINATES["longitude"]) / 100
 
 # Environment variables for configuration
 KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
@@ -29,7 +36,7 @@ WEATHER_TOPIC = os.getenv("WEATHER_TOPIC", "weather_topic")
 EMERGENCY_TOPIC = os.getenv("EMERGENCY_TOPIC", "emergency_topic")
 
 start_time = datetime.now()
-start_location = LONDON_COORDINATES.copy()
+start_location = ANTIPOLO_COORDINATES.copy()
 
 def get_next_time():
     global start_time
@@ -86,9 +93,9 @@ def generate_traffic_camera_data(device_id, timestamp, location, camera_id):
 def simulate_vehicle_movement():
     global start_location
     
-    # move towards birmingham
+    # move towards BAGUIO
     start_location['latitude'] += LATITUDE_INCREMENT
-    start_location['longitude'] += LONGTITUDE_INCREMENT
+    start_location['longitude'] += LONGITUDE_INCREMENT
     
     # random road journey
     start_location['latitude'] += random.uniform(-0.0005, 0.0005)
@@ -107,9 +114,9 @@ def generate_vehicle_data(device_id):
         'location': (location['latitude'], location['longitude']),
         'speed': random.uniform(10, 40),
         'direction': 'North-East',
-        'make': 'Toyota',
-        'model': 'Wigo',
-        'year': 2025,
+        'make': 'Mitsubishi',
+        'model': 'Outlander',
+        'year': 2026,
         'fuel_type': 'Diesel',
     }
     
@@ -135,7 +142,7 @@ def produce_to_kafka(producer, topic, data):
         on_delivery=delivery_report
         )
     
-    producer.flush()
+    
     
 def simulate_journey(producer, device_id):
     while True:
@@ -145,9 +152,9 @@ def simulate_journey(producer, device_id):
         weather_data = generate_weather_data(device_id, vehicle_data['timestamp'], vehicle_data['location'])
         emergency_incident_data = generate_emergency_incident_data(device_id, vehicle_data['timestamp'], vehicle_data['location'])  
         
-        if (vehicle_data['location'][0] >= BIRMINGHAM_COORDINATES['latitude'] and
-            vehicle_data['location'][1] <= BIRMINGHAM_COORDINATES['longitude']):
-            print("Vehicle has reached Birmingham. Ending simulation.")
+        if (vehicle_data['location'][0] >= BAGUIO_COORDINATES['latitude'] and
+            vehicle_data['location'][1] <= BAGUIO_COORDINATES['longitude']):
+            print("Vehicle has reached Baguio. Ending simulation.")
             break
         
         produce_to_kafka(producer,VEHICLE_TOPIC, vehicle_data)
@@ -155,8 +162,10 @@ def simulate_journey(producer, device_id):
         produce_to_kafka(producer,TRAFFIC_TOPIC, traffic_cam_data)
         produce_to_kafka(producer,WEATHER_TOPIC, weather_data)
         produce_to_kafka(producer,EMERGENCY_TOPIC, emergency_incident_data)
+        # Flush after every iteration
+        producer.flush()
         
-        time.sleep(5)
+        
         
 if __name__ == "__main__":
     producer_config = {
@@ -167,7 +176,7 @@ if __name__ == "__main__":
     producer = SerializingProducer(producer_config)
 
     try:
-        simulate_journey(producer, 'Vehicle1')
+        simulate_journey(producer, 'MN-05161')
 
     except KeyboardInterrupt:
         print('Simulation interrupted by user.')
