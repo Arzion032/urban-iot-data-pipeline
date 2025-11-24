@@ -151,9 +151,9 @@ Navigate to `http://localhost:9090` to monitor Spark jobs.
 
 2. **Run Crawler** to populate the data catalog
 
-3. **Query with Athena**:
+3. **Query with Dbeaver**:
    ```sql
-   SELECT * FROM "urban-city-iot-catalog"."vehicle_data" LIMIT 10;
+   SELECT * FROM dev_urban_iot_city.vehicle_data LIMIT 10;
    ```
 
 ## Key Features
