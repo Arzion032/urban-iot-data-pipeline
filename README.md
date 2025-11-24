@@ -217,9 +217,9 @@ This project uses a hybrid deployment approach: processing infrastructure runs i
 ![Glue Crawler](assets/glue-crawler-config.png)
 *Glue Crawler configured to automatically catalog new data*
 
-### Athena Query Results
+### Dbeaver Query Results
 
-![Athena Query](assets/dbeaver_query.png)
+![Dbeaver Query](assets/dbeaver_query.png)
 *Sample query on vehicle data using Amazon Athena*
 
 ### Spark Streaming UI
