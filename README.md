@@ -187,7 +187,7 @@ Spark validates and transforms incoming JSON data:
 - **Apache Spark 3.5.0** (Structured Streaming)
 - **AWS S3** (Data Lake storage)
 - **AWS Glue** (Data cataloging)
-- **Python 3.x** (Data generation)
+- **Python 3.12.3** (Data generation)
 - **Docker & Docker Compose** (Containerization)
 
 ## Deployment & Results
