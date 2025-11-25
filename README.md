@@ -4,9 +4,7 @@ A real-time data streaming pipeline that simulates vehicle journey data from Ant
 
 ## Architecture Overview
 
-```
-Python Data Generator → Kafka (KRaft Mode) → Spark Streaming → AWS S3 → AWS Glue Crawler → Data Catalog
-```
+![Architecture](assets/pipeline-architecture.png)
 
 ### Data Flow
 

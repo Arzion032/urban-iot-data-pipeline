@@ -27,13 +27,13 @@ LATITUDE_INCREMENT = (BAGUIO_COORDINATES["latitude"]
 LONGITUDE_INCREMENT = (BAGUIO_COORDINATES["longitude"] 
                             - ANTIPOLO_COORDINATES["longitude"]) / 100
 
-# Environment variables for configuration
-KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
-VEHICLE_TOPIC = os.getenv("VEHICLE_TOPIC", "vehicle_topic")
-GPS_TOPIC = os.getenv("GPS_TOPIC", "gps_topic")
-TRAFFIC_TOPIC = os.getenv("TRAFFIC_TOPIC", "traffic_topic")
-WEATHER_TOPIC = os.getenv("WEATHER_TOPIC", "weather_topic")
-EMERGENCY_TOPIC = os.getenv("EMERGENCY_TOPIC", "emergency_topic")
+# Configs
+KAFKA_BOOTSTRAP_SERVERS = "localhost:9092"
+VEHICLE_TOPIC = "vehicle_topic"
+GPS_TOPIC = "gps_topic"
+TRAFFIC_TOPIC = "traffic_topic"
+WEATHER_TOPIC = "weather_topic"
+EMERGENCY_TOPIC = "emergency_topic"
 
 start_time = datetime.now()
 start_location = ANTIPOLO_COORDINATES.copy()
