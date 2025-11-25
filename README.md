@@ -29,7 +29,7 @@ The pipeline generates five concurrent data streams:
 
 - Docker and Docker Compose
 - AWS Account with S3 access
-- Python 3.x
+- Python 3.12.3
 - AWS credentials configured
 
 ## Project Structure
