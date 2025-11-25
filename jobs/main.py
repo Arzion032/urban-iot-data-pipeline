@@ -27,7 +27,7 @@ LATITUDE_INCREMENT = (BAGUIO_COORDINATES["latitude"]
 LONGITUDE_INCREMENT = (BAGUIO_COORDINATES["longitude"] 
                             - ANTIPOLO_COORDINATES["longitude"]) / 100
 
-# Environment variables for configuration
+# Configs
 KAFKA_BOOTSTRAP_SERVERS = "localhost:9092"
 VEHICLE_TOPIC = "vehicle_topic"
 GPS_TOPIC = "gps_topic"

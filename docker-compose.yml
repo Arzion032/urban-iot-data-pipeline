@@ -86,12 +86,16 @@ services:
     networks:
       - urban_city
 
+  # Workers Gang
   sparky-worker-1:
     <<: *sparky-common
     container_name: spark-worker-1
   sparky-worker-2:
     <<: *sparky-common
     container_name: spark-worker-2
+  sparky-worker-3:
+    <<: *sparky-common
+    container_name: spark-worker-3
 
 networks:
   urban_city:
