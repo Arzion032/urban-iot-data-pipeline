@@ -102,7 +102,8 @@ This simulates a vehicle journey from Antipolo to Baguio, generating data every 
 ```bash
 docker exec -it spark-master /opt/spark/bin/spark-submit \
   --master spark://spark-master:7077 \
-  --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.3,org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk:1.12.524 \
+  --conf spark.jars.ivy=/tmp/.ivy2 \
+  --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.3,org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk:1.12.524 \
   /opt/spark/jobs/urban-city.py
 ```
 
